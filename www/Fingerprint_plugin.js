@@ -72,7 +72,7 @@ FingerprintPlugin.prototype.requestPermission = function(opts, successCallback, 
     alert('Entering the request Permission action!');
     cordova.exec( successCallback,
         errorCallback,
-        'Serial',
+        'FingerprintPlugin',
         'requestPermission',
         [{'opts': opts}]
     );
