@@ -1,0 +1,32 @@
+{
+  "name": "FingerprintPlugin",
+  "version": "0.0.1",
+  "description": "An Android Cordova plugin that allows users to display simple Toast messages at the bottom of the screen.",
+  "cordova": {
+    "id": "Fingerprint_plugin",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaoamsantos/Fingerprint_plugin"
+  },
+  "keywords": [
+    "Outsystems",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Joao Miguel Santos <joaomsantos@deloitte.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joaoamsantos/Fingerprint_plugin/issues"
+  },
+  "homepage": "https://github.com/joaoamsantos/Fingerprint_plugin"
+}
