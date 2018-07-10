@@ -147,7 +147,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 	 * Request permission the the user for the app to use the USB/serial port
 	 * @param callbackContext the cordova {@link CallbackContext}
 	 */
-	private void requestPermission(final JSONObject opts, final CallbackContext callbackContext) {
+	public void requestPermission(final JSONObject opts, final CallbackContext callbackContext) {
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
 				// get UsbManager from Android
