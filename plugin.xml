@@ -26,18 +26,22 @@
             </feature>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/*">
+        <config-file target="AndroidManifest.xml" parent="/manifest">
             <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
             <uses-permission android:name="android.permission.USB_PERMISSION" />
             <uses-permission android:name="android.permission.WRITE_SETTINGS" />
             <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
         </config-file>
 
-        <application>
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-            </intent-filter>
-        </application>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+                <intent-filter>
+                        <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+                </intent-filter>
+                <intent-filter>
+                        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+                </intent-filter>
+                <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" android:resource="@xml/device_filter" />
+        </config-file>
 
         <source-file src="src/android/FingerprintPlugin/FingerprintPlugin.java"  target-dir="src/FingerprintPlugin"/>
         <source-file src="src/android/FingerprintPlugin/UsbBroadcastReceiver.java" target-dir="src/FingerprintPlugin"/>
