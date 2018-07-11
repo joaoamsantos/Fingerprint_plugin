@@ -90,6 +90,12 @@ public class FingerprintPlugin extends CordovaPlugin {
 					FingerprintPlugin.this.updateReceivedData(data);
 				}
 			};
+	
+	
+	/*Empty Constructor*/
+	public FingerprintPlugin (){
+	
+	}
 
 	/**
 	 * Overridden execute method
