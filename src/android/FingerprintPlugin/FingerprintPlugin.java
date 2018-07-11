@@ -595,9 +595,8 @@ public class FingerprintPlugin extends CordovaPlugin {
         	callbackContext.sendPluginResult(result);
             return true;
         }
-        hasPermission = false;
         result = new PluginResult(PluginResult.Status.ERROR,"Fail! Couldn't get the Permission!");
     	callbackContext.sendPluginResult(result);
-        return hasPermission;
+        return false;
     }
 }
