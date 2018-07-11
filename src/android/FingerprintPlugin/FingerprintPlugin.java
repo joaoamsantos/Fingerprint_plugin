@@ -584,7 +584,7 @@ public class FingerprintPlugin extends CordovaPlugin {
     	PluginResult result;
         UsbManager usbManagerDevices = (UsbManager) cordova.getActivity().getSystemService(Context.USB_SERVICE);
         HashMap<String, UsbDevice> usbDeviceList = usbManagerDevices.getDeviceList();
-        if (usbDeviceList.isEmpty()) {
+        if (!usbDeviceList.isEmpty()) {
         	result = new PluginResult(PluginResult.Status.OK,"Success! You have Permission!");
         	callbackContext.sendPluginResult(result);
             return true;
