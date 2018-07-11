@@ -28,7 +28,7 @@
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-            <uses-feature android:name="android.hardware.usb.host" android:required="true" />
+            <uses-feature android:name="android.hardware.usb.host"/>
             <uses-permission android:name="android.permission.USB_PERMISSION" />
             <uses-permission android:name="android.permission.WRITE_SETTINGS" />
         </config-file>
