@@ -50,6 +50,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 	private static final String ACTION_WRITE_HEX = "writeSerialHex";
 	private static final String ACTION_CLOSE = "closeSerial";
 	private static final String ACTION_READ_CALLBACK = "registerReadCallback";
+	private static final String ACTION_DEVICES_HAS_PERMISSION = "isDevicesHasPermission";
 
 	// UsbManager instance to deal with permission and opening
 	private UsbManager manager;
@@ -139,6 +140,11 @@ public class FingerprintPlugin extends CordovaPlugin {
 			registerReadCallback(callbackContext);
 			return true;
 		}
+
+		else if (ACTION_DEVICES_HAS_PERMISSION.equals(action)) {
+			isDevicesHasPermission(callbackContext);
+			return true;
+		}
 		// the action doesn't exist
 		return false;
 	}
@@ -147,7 +153,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 	 * Request permission the the user for the app to use the USB/serial port
 	 * @param callbackContext the cordova {@link CallbackContext}
 	 */
-	public void requestPermission(final JSONObject opts, final CallbackContext callbackContext) {
+	private void requestPermission(final JSONObject opts, final CallbackContext callbackContext) {
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
 				// get UsbManager from Android
@@ -570,4 +576,48 @@ public class FingerprintPlugin extends CordovaPlugin {
 		String string = Base64.encodeToString(bytes, Base64.NO_WRAP);
 		this.addProperty(obj, key, string);
 	}
+
+	private int grantePermission() {
+        Context context = context;
+        if (context != null) {
+            UsbManager usbManager = (UsbManager) context.getSystemService("usb");
+            for (UsbDevice usbDevice : usbManager.getDeviceList().values()) {
+                if (isSupported(new USBDeviceAttributes(usbDevice.getVendorId(), usbDevice.getProductId())) && !usbManager.hasPermission(usbDevice)) {
+                    usbManager.requestPermission(usbDevice, PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0));
+                }
+            }
+        }
+        return 0;
+    }
+
+    public boolean isDevicesHasPermission(CallbackContext callbackContext) {
+    	PluginResult result;
+        if (IsUsbDaemonStarted() == 1) {
+        	resutlt = new PluginResult(PluginResult.Status.OK,"Success! You have Permission!");
+        	callbackContext.sendPluginResult(result);
+            return true;
+        }
+        Context context = context;
+        if (context == null) {
+        	resutlt = new PluginResult(PluginResult.Status.ERROR,"Fail! Couldn't get the Permission!");
+        	callbackContext.sendPluginResult(result);
+            return false;
+        }
+        UsbManager usbManager = (UsbManager) context.getSystemService("usb");
+        HashMap<String, UsbDevice> usbDeviceList = usbManager.getDeviceList();
+        if (usbDeviceList.isEmpty()) {
+        	resutlt = new PluginResult(PluginResult.Status.OK,"Success! You have Permission!");
+        	callbackContext.sendPluginResult(result);
+            return true;
+        }
+        boolean hasPermission = true;
+        for (UsbDevice usbDevice : usbDeviceList.values()) {
+            if (isSupported(new USBDeviceAttributes(usbDevice.getDeviceName(), usbDevice.getVendorId(), usbDevice.getProductId(), 1)) && !usbManager.hasPermission(usbDevice)) {
+                hasPermission = false;
+            }
+        }
+        resutlt = new PluginResult(PluginResult.Status.ERROR,"Fail! Couldn't get the Permission!");
+    	callbackContext.sendPluginResult(result);
+        return hasPermission;
+    }
 }
