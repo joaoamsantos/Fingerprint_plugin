@@ -577,6 +577,27 @@ public class FingerprintPlugin extends CordovaPlugin {
 		this.addProperty(obj, key, string);
 	}
 
+	public native int IsUsbDaemonStarted();
+
+    public native String getUsbDaemonVersion();
+
+    public native void initialize();
+
+	public synchronized boolean isSupported(USBDeviceAttributes attribs) {
+        boolean z = false;
+        synchronized (this) {
+            if (attribs != null) {
+                for (USBDeviceAttributes supportedAttribs : supportedDevices.keySet()) {
+                    if (supportedAttribs.getVendorId() == attribs.getVendorId() && supportedAttribs.getProductId() == attribs.getProductId()) {
+                        z = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return z;
+    }
+
 	private int grantePermission() {
         Context context = context;
         if (context != null) {
