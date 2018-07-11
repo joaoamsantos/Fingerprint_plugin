@@ -582,14 +582,8 @@ public class FingerprintPlugin extends CordovaPlugin {
 
 	public boolean isDevicesHasPermission(CallbackContext callbackContext) {
     	PluginResult result;
-        Context context = context;
-        if (context == null) {
-        	result = new PluginResult(PluginResult.Status.ERROR,"Fail! Couldn't get the Permission!");
-        	callbackContext.sendPluginResult(result);
-            return false;
-        }
-        UsbManager usbManager = (UsbManager) context.getSystemService("usb");
-        HashMap<String, UsbDevice> usbDeviceList = usbManager.getDeviceList();
+        UsbManager usbManagerDevices = (UsbManager) cordova.getActivity().getSystemService(Context.USB_SERVICE);
+        HashMap<String, UsbDevice> usbDeviceList = usbManagerDevices.getDeviceList();
         if (usbDeviceList.isEmpty()) {
         	result = new PluginResult(PluginResult.Status.OK,"Success! You have Permission!");
         	callbackContext.sendPluginResult(result);
