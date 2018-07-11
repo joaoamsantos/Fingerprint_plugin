@@ -35,9 +35,6 @@ import android.hardware.usb.UsbManager;
 import android.util.Base64;
 import android.util.Log;
 
-import outsystems.hubedition.runtimeplatform;
-
-
 /**
  * Cordova plugin to communicate with the android serial port
  * @author Joao Miguel Santos <joaomsantos@deloitte.pt>
