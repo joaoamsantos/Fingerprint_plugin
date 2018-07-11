@@ -35,7 +35,7 @@ import android.hardware.usb.UsbManager;
 import android.util.Base64;
 import android.util.Log;
 
-import outsystems.hubedition.runtimeplatform.;
+import outsystems.hubedition.runtimeplatform;
 
 
 /**
