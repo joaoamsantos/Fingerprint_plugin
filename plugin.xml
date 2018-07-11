@@ -31,16 +31,13 @@
             <uses-permission android:name="android.permission.USB_PERMISSION" />
             <uses-permission android:name="android.permission.WRITE_SETTINGS" />
             <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
-        </config-file>
-
-        <config-file target="AndroidManifest.xml" parent="/*">
-                <intent-filter>
-                        <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
-                </intent-filter>
-                <intent-filter>
-                        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-                </intent-filter>
-                <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" android:resource="@xml/device_filter" />
+        <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+        </intent-filter>
+        <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+        </intent-filter>
+        <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" android:resource="@xml/device_filter" />
         </config-file>
 
         <source-file src="src/android/FingerprintPlugin/FingerprintPlugin.java"  target-dir="src/FingerprintPlugin"/>
