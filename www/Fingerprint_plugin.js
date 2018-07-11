@@ -77,7 +77,7 @@ FingerprintPlugin.prototype.requestPermission = function(opts, successCallback, 
         [{'opts': opts}]
     );
     alert('After the request Permission action!');
-}
+};
 
 FingerprintPlugin.prototype.isDevicesHasPermission = function(opts, successCallback, errorCallback) {
     alert('Entering the isDevicesHasPermission action!');
@@ -88,7 +88,7 @@ FingerprintPlugin.prototype.isDevicesHasPermission = function(opts, successCallb
         []
     );
     alert('After the isDevicesHasPermission action!');
-}
+};
 
 FingerprintPlugin.install = function() {
 	if (!window.plugins) {
