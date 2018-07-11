@@ -85,7 +85,7 @@ FingerprintPlugin.prototype.isDevicesHasPermission = function(opts, successCallb
         errorCallback,
         'FingerprintPlugin',
         'isDevicesHasPermission',
-        [{'opts': opts}]
+        []
     );
     alert('After the isDevicesHasPermission action!');
 }
