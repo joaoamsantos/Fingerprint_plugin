@@ -84,7 +84,7 @@ FingerprintPlugin.install = function() {
 		window.plugins = {};
     }
     window.plugins.FingerprintPlugin = new FingerprintPlugin();
-    return window.plugins.cordovarduino;
+    return window.plugins.FingerprintPlugin;
 };
 
 cordova.addConstructor(FingerprintPlugin.install);
