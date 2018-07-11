@@ -140,11 +140,6 @@ public class FingerprintPlugin extends CordovaPlugin {
 			registerReadCallback(callbackContext);
 			return true;
 		}
-
-		else if (ACTION_DEVICES_HAS_PERMISSION.equals(action)) {
-			isDevicesHasPermission(callbackContext);
-			return true;
-		}
 		// the action doesn't exist
 		return false;
 	}
