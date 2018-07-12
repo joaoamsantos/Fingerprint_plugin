@@ -1,4 +1,4 @@
-package com.morpho.android.usb;
+package FingerprintPlugin;
 
 import android.os.Parcel;
 import android.os.Parcelable;
