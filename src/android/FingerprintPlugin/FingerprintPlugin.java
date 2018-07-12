@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.HashMap;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -35,6 +34,9 @@ import android.hardware.usb.UsbManager;
 import android.util.Base64;
 import android.util.Log;
 
+import FingerprintPlugin.UsbBroadcastReceiver;
+import FingerprintPlugin.USBDeviceAttributes;
+
 /**
  * Cordova plugin to communicate with the android serial port
  * @author Joao Miguel Santos <joaomsantos@deloitte.pt>
@@ -46,12 +48,27 @@ public class FingerprintPlugin extends CordovaPlugin {
 	private static final String ACTION_REQUEST_PERMISSION = "requestPermission";
 	private static final String ACTION_OPEN = "openSerial";
 	private static final String ACTION_READ = "readSerial";
-	private static final String ACTION_WRITE = "writeSerial";
-	private static final String ACTION_WRITE_HEX = "writeSerialHex";
 	private static final String ACTION_CLOSE = "closeSerial";
 	private static final String ACTION_READ_CALLBACK = "registerReadCallback";
 	private static final String ACTION_DEVICES_HAS_PERMISSION = "isDevicesHasPermission";
 
+	public static final String SOFTWAREID_CBM = "CBM";
+    public static final String SOFTWAREID_CBME3 = "CBM-E3";
+    public static final String SOFTWAREID_CBME3L = "CBM-E3L";
+    public static final String SOFTWAREID_FVP = "MSO FVP";
+    public static final String SOFTWAREID_FVP_C = "MSO FVP_C";
+    public static final String SOFTWAREID_FVP_CL = "MSO FVP_CL";
+    public static final String SOFTWAREID_MASIGMA = "MA SIGMA";
+    public static final String SOFTWAREID_MEP = "MEPUSB";
+    public static final String SOFTWAREID_MSO100 = "MSO100";
+    public static final String SOFTWAREID_MSO1300E3 = "MSO1300-E3";
+    public static final String SOFTWAREID_MSO1300E3L = "MSO1300-E3L";
+    public static final String SOFTWAREID_MSO1350 = "MSO1350";
+    public static final String SOFTWAREID_MSO1350E3 = "MSO1350-E3";
+    public static final String SOFTWAREID_MSO1350E3L = "MSO1350-E3L";
+    public static final String SOFTWAREID_MSO300 = "MSO300";
+    public static final String SOFTWAREID_MSO350 = "MSO350";
+    public static final String SOFTWAREID_MSOTEST = "MSOTEST";
 
 
 	// UsbManager instance to deal with permission and opening
@@ -72,6 +89,11 @@ public class FingerprintPlugin extends CordovaPlugin {
 	private boolean setDTR;
 	private boolean setRTS;
 	private boolean sleepOnPause;
+
+	static {
+        System.loadLibrary("/FingerprintPlugin/libs/NativeMorphoSmartSDK_6.13.3.0-5.1.so");
+        System.loadLibrary("/FingerprintPlugin/libs/MSO100.so");
+    }
 	
 	// callback that will be used to send back data to the cordova app
 	private CallbackContext readCallback;
@@ -90,12 +112,6 @@ public class FingerprintPlugin extends CordovaPlugin {
 					FingerprintPlugin.this.updateReceivedData(data);
 				}
 			};
-	
-	
-	/*Empty Constructor*/
-	public FingerprintPlugin (){
-	
-	}
 
 	/**
 	 * Overridden execute method
@@ -119,18 +135,6 @@ public class FingerprintPlugin extends CordovaPlugin {
 		else if (ACTION_OPEN.equals(action)) {
 			JSONObject opts = arg_object.has("opts")? arg_object.getJSONObject("opts") : new JSONObject();
 			openSerial(opts, callbackContext);
-			return true;
-		}
-		// write to the serial port
-		else if (ACTION_WRITE.equals(action)) {
-			String data = arg_object.getString("data");
-			writeSerial(data, callbackContext);
-			return true;
-		}
-		// write hex to the serial port
-		else if (ACTION_WRITE_HEX.equals(action)) {
-			String data = arg_object.getString("data");
-			writeSerialHex(data, callbackContext);
 			return true;
 		}
 		// read on the serial port
@@ -279,83 +283,6 @@ public class FingerprintPlugin extends CordovaPlugin {
 				onDeviceStateChange();
 			}
 		});
-	}
-
-	/**
-	 * Write on the serial port
-	 * @param data the {@link String} representation of the data to be written on the port
-	 * @param callbackContext the cordova {@link CallbackContext}
-	 */
-	private void writeSerial(final String data, final CallbackContext callbackContext) {
-		cordova.getThreadPool().execute(new Runnable() {
-			public void run() {
-				if (port == null) {
-					callbackContext.error("Writing a closed port.");
-				}
-				else {
-					try {
-						Log.d(TAG, data);
-						byte[] buffer = data.getBytes();
-						port.write(buffer, 1000);
-						callbackContext.success();
-					}
-					catch (IOException e) {
-						// deal with error
-						Log.d(TAG, e.getMessage());
-						callbackContext.error(e.getMessage());
-					}
-				}
-			}
-		});
-	}
-
-	/**
-	 * Write hex on the serial port
-	 * @param data the {@link String} representation of the data to be written on the port as hexadecimal string
-	 *             e.g. "ff55aaeeef000233"
-	 * @param callbackContext the cordova {@link CallbackContext}
-	 */
-	private void writeSerialHex(final String data, final CallbackContext callbackContext) {
-		cordova.getThreadPool().execute(new Runnable() {
-			public void run() {
-				if (port == null) {
-					callbackContext.error("Writing a closed port.");
-				}
-				else {
-					try {
-						Log.d(TAG, data);
-						byte[] buffer = hexStringToByteArray(data);
-						int result = port.write(buffer, 1000);
-						callbackContext.success(result + " bytes written.");
-					}
-					catch (IOException e) {
-						// deal with error
-						Log.d(TAG, e.getMessage());
-						callbackContext.error(e.getMessage());
-					}
-				}
-			}
-		});
-	}
-
-	/**
-	 * Convert a given string of hexadecimal numbers
-	 * into a byte[] array where every 2 hex chars get packed into
-	 * a single byte.
-	 *
-	 * E.g. "ffaa55" results in a 3 byte long byte array
-	 *
-	 * @param s
-	 * @return
-	 */
-	private byte[] hexStringToByteArray(String s) {
-		int len = s.length();
-		byte[] data = new byte[len / 2];
-		for (int i = 0; i < len; i += 2) {
-			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-					+ Character.digit(s.charAt(i+1), 16));
-		}
-		return data;
 	}
 
 	/**
@@ -544,24 +471,6 @@ public class FingerprintPlugin extends CordovaPlugin {
 
 
 	/**
-	 * Destroy activity handler
-	 * @see org.apache.cordova.CordovaPlugin#onDestroy()
-	 */
-	@Override
-	public void onDestroy() {
-		Log.d(TAG, "Destroy, port=" + port);
-		if(port != null) {
-			try {
-				port.close();
-			}
-			catch (IOException e) {
-				Log.d(TAG, e.getMessage());
-			}
-		}
-		onDeviceStateChange();
-	}
-
-	/**
 	 * Utility method to add some properties to a {@link JSONObject}
 	 * @param obj the json object where to add the new property
 	 * @param key property key
@@ -574,23 +483,11 @@ public class FingerprintPlugin extends CordovaPlugin {
 		catch (JSONException e){}
 	}
 
-	/**
-	 * Utility method to add some properties to a {@link JSONObject}
-	 * @param obj the json object where to add the new property
-	 * @param key property key
-	 * @param bytes the array of byte to add as value to the {@link JSONObject}
-	 */
-	private void addPropertyBytes(JSONObject obj, String key, byte[] bytes) {
-		String string = Base64.encodeToString(bytes, Base64.NO_WRAP);
-		this.addProperty(obj, key, string);
-	}
-
 	public boolean isDevicesHasPermission(CallbackContext callbackContext) {
     	PluginResult result;
-	Context currentContext = this.cordova.getActivity().getApplicationContext();
-        UsbManager usbManagerDevices = (UsbManager) currentContext.getSystemService(Context.USB_SERVICE);
-        HashMap<String, UsbDevice> usbDeviceList = usbManagerDevices.getDeviceList();
-        if (!usbDeviceList.isEmpty()) {
+		Context currentContext = this.cordova.getActivity().getApplicationContext();
+        boolean listOfDevices = listDevices();
+        if (listOfDevices) {
         	result = new PluginResult(PluginResult.Status.OK);
         	callbackContext.sendPluginResult(result);
             return true;
@@ -598,5 +495,15 @@ public class FingerprintPlugin extends CordovaPlugin {
         result = new PluginResult(PluginResult.Status.ERROR);
     	callbackContext.sendPluginResult(result);
         return false;
+    }
+
+    public boolean listDevices() throws Exception {
+        USBDeviceAttributes[] attribsList = enumerate();
+        if (!(deviceList == null || attribsList == null)) {
+            for (int i = 0; i < deviceList.size(); i++) 
+                ((USBDevice) deviceList.get(i)).CreateInterface(attribsList[i].getInterfaceNumber());
+            return true;
+        }
+    	return false;
     }
 }
