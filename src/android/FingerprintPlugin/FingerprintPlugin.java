@@ -499,7 +499,7 @@ public class FingerprintPlugin extends CordovaPlugin {
         return false;
     }
 
-    	public boolean listDevices() throws Exception {
+    	public boolean listDevices() {
 	Context currentContext = this.cordova.getActivity().getApplicationContext();
 	if (currentContext != null) {
 	 	UsbManager usbManager = (UsbManager) currentContext.getSystemService("usb");
