@@ -34,8 +34,7 @@ import android.hardware.usb.UsbManager;
 import android.util.Base64;
 import android.util.Log;
 
-import FingerprintPlugin.UsbBroadcastReceiver;
-import FingerprintPlugin.USBDeviceAttributes;
+import FingerprintPlugin.*;
 
 /**
  * Cordova plugin to communicate with the android serial port
