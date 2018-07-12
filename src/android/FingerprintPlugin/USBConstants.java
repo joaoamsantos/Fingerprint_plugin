@@ -1,0 +1,46 @@
+package com.morpho.android.usb;
+
+public class USBConstants {
+    public static final int DEFAULT_PACKET_SIZE = 8;
+    public static final int DEFAULT_STRING_DESCRIPTOR_SIZE = 64;
+    public static final boolean FORCE_CLAIM = true;
+    public static final int INVALID_USB_INTERFACE = -1;
+    public static final int OFFSET_MANUFACTRURER_IDX = 14;
+    public static final int OFFSET_MAX_PACKET_SIZE = 7;
+    public static final int OFFSET_PRODUCT_IDX = 15;
+    public static final int OFFSET_SERIAL_IDX = 16;
+    public static final int RETURN_ERROR_CANNOT_CLAIM_INTERFACE = -1;
+    public static final int RETURN_ERROR_CANNOT_GET_STRING_DESCRIPTOR = -4;
+    public static final int RETURN_ERROR_CANNOT_RELEASE_INTERFACE = -5;
+    public static final int RETURN_ERROR_DEVICE_NOT_CONNECTED = -6;
+    public static final int RETURN_ERROR_FEATURE_REPORT_GET_FAILURE = -3;
+    public static final int RETURN_ERROR_FEATURE_REPORT_SEND_FAILURE = -2;
+    public static final int RETURN_ERROR_UNABLE_TO_READ_DATA = -8;
+    public static final int RETURN_ERROR_UNABLE_TO_WRITE_DATA = -7;
+    public static final int RETURN_SUCCESS = 0;
+    public static final long SPUSB_TIMEOUT_INFINITE = -1;
+    public static final int TIMEOUT = 1000;
+    public static final int USB_DESCRIPTOR_DEVICE = 1;
+    public static final int USB_DESCRIPTOR_REPORT = 3;
+    public static final int USB_DESCRIPTOR_STRING = 3;
+    public static final int USB_DEVICE_DESCRIPTOR_LANGUAGE_ENGLISH = 1033;
+    public static final int USB_DEVICE_DESCRIPTOR_LENGTH = 18;
+    public static final int USB_ENDPOINT_ADDRESS_MASK = 15;
+    public static final int USB_ENDPOINT_DIR_MASK = 128;
+    public static final int USB_ENDPOINT_IN = 128;
+    public static final int USB_ENDPOINT_OUT = 0;
+    public static final int USB_ENDPOINT_TYPE_BULK = 2;
+    public static final int USB_ENDPOINT_TYPE_CONTROL = 0;
+    public static final int USB_ENDPOINT_TYPE_INTERRUPT = 3;
+    public static final int USB_ENDPOINT_TYPE_ISOCHRONOUS = 1;
+    public static final int USB_ENDPOINT_TYPE_MASK = 3;
+    public static final int USB_MAXINTERFACES = 32;
+    public static final int USB_RECIPIENT_INTERFACE = 1;
+    public static final int USB_REPORT_TYPE_FEATURE = 768;
+    public static final int USB_REPORT_TYPE_STRING = 768;
+    public static final int USB_REQUEST_GET_DESCRIPTOR = 6;
+    public static final int USB_REQUEST_GET_FEATURE = 1;
+    public static final int USB_REQUEST_SET_FEATURE = 9;
+    public static final int USB_REQUEST_TYPE_CLASS = 32;
+    public static final int USB_REQUEST_TYPE_STANDARD = 0;
+}
