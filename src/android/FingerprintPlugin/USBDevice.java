@@ -130,7 +130,7 @@ public class USBDevice {
     }
 
     private synchronized int getDescriptor(byte[] buffer, int descType, int index) throws Exception {
-        int res;
+        int res = 0;
         if (buffer != null) {
             if (!(this.mConnection == null || this.mInterface == null)) {
                 if (this.mConnection.claimInterface(this.mInterface, true)) {
