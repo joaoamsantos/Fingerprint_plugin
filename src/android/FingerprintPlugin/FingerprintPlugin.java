@@ -41,6 +41,9 @@ import FingerprintPlugin.*;
  * @author Joao Miguel Santos <joaomsantos@deloitte.pt>
  */
 public class FingerprintPlugin extends CordovaPlugin {
+	
+	static volatile List<USBDevice> deviceList = null;
+	
 	// logging tag
 	private final String TAG = FingerprintPlugin.class.getSimpleName();
 	// actions definitions
@@ -52,22 +55,22 @@ public class FingerprintPlugin extends CordovaPlugin {
 	private static final String ACTION_DEVICES_HAS_PERMISSION = "isDevicesHasPermission";
 
 	public static final String SOFTWAREID_CBM = "CBM";
-    public static final String SOFTWAREID_CBME3 = "CBM-E3";
-    public static final String SOFTWAREID_CBME3L = "CBM-E3L";
-    public static final String SOFTWAREID_FVP = "MSO FVP";
-    public static final String SOFTWAREID_FVP_C = "MSO FVP_C";
-    public static final String SOFTWAREID_FVP_CL = "MSO FVP_CL";
-    public static final String SOFTWAREID_MASIGMA = "MA SIGMA";
-    public static final String SOFTWAREID_MEP = "MEPUSB";
-    public static final String SOFTWAREID_MSO100 = "MSO100";
-    public static final String SOFTWAREID_MSO1300E3 = "MSO1300-E3";
-    public static final String SOFTWAREID_MSO1300E3L = "MSO1300-E3L";
-    public static final String SOFTWAREID_MSO1350 = "MSO1350";
-    public static final String SOFTWAREID_MSO1350E3 = "MSO1350-E3";
-    public static final String SOFTWAREID_MSO1350E3L = "MSO1350-E3L";
-    public static final String SOFTWAREID_MSO300 = "MSO300";
-    public static final String SOFTWAREID_MSO350 = "MSO350";
-    public static final String SOFTWAREID_MSOTEST = "MSOTEST";
+	public static final String SOFTWAREID_CBME3 = "CBM-E3";
+    	public static final String SOFTWAREID_CBME3L = "CBM-E3L";
+    	public static final String SOFTWAREID_FVP = "MSO FVP";
+    	public static final String SOFTWAREID_FVP_C = "MSO FVP_C";
+    	public static final String SOFTWAREID_FVP_CL = "MSO FVP_CL";
+    	public static final String SOFTWAREID_MASIGMA = "MA SIGMA";
+    	public static final String SOFTWAREID_MEP = "MEPUSB";
+    	public static final String SOFTWAREID_MSO100 = "MSO100";
+    	public static final String SOFTWAREID_MSO1300E3 = "MSO1300-E3";
+    	public static final String SOFTWAREID_MSO1300E3L = "MSO1300-E3L";
+    	public static final String SOFTWAREID_MSO1350 = "MSO1350";
+    	public static final String SOFTWAREID_MSO1350E3 = "MSO1350-E3";
+    	public static final String SOFTWAREID_MSO1350E3L = "MSO1350-E3L";
+    	public static final String SOFTWAREID_MSO300 = "MSO300";
+    	public static final String SOFTWAREID_MSO350 = "MSO350";
+    	public static final String SOFTWAREID_MSOTEST = "MSOTEST";
 
 
 	// UsbManager instance to deal with permission and opening
@@ -484,7 +487,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 
 	public boolean isDevicesHasPermission(CallbackContext callbackContext) {
     	PluginResult result;
-		Context currentContext = this.cordova.getActivity().getApplicationContext();
+	Context currentContext = this.cordova.getActivity().getApplicationContext();
         boolean listOfDevices = listDevices();
         if (listOfDevices) {
         	result = new PluginResult(PluginResult.Status.OK);
@@ -496,13 +499,15 @@ public class FingerprintPlugin extends CordovaPlugin {
         return false;
     }
 
-    public boolean listDevices() throws Exception {
-        USBDeviceAttributes[] attribsList = enumerate();
-        if (!(deviceList == null || attribsList == null)) {
-            for (int i = 0; i < deviceList.size(); i++) 
-                ((USBDevice) deviceList.get(i)).CreateInterface(attribsList[i].getInterfaceNumber());
-            return true;
-        }
-    	return false;
+    	public boolean listDevices() throws Exception {
+	Context currentContext = this.cordova.getActivity().getApplicationContext();
+	if (context != null) {
+	 	UsbManager usbManager = (UsbManager) context.getSystemService("usb");
+	 	for (UsbDevice usbDevice : usbManager.getDeviceList().values()) {
+	 		if(!usbDevice.getDeviceName().equals(""))
+	 		return true;
+		 }
+    	}
+	return false;
     }
 }
