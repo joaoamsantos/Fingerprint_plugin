@@ -8,6 +8,8 @@ import android.hardware.usb.UsbManager;
 import android.util.Log;
 import java.io.UnsupportedEncodingException;
 
+import FingerprintPlugin.*;
+
 public class USBDevice {
     public static UsbManager mManager = null;
     public USBDeviceAttributes mAttributes = null;
