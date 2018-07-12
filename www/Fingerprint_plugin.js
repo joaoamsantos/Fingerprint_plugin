@@ -1,15 +1,15 @@
 // Empty constructor
 function FingerprintPlugin() {}
 
-FingerprintPlugin.prototype.requestPermission = function(opts, successCallback, errorCallback) {
-    alert('Entering the request Permission action!');
+FingerprintPlugin.prototype.isDevicesHasPermission = function(opts, successCallback, errorCallback) {
+    alert('Entering the isDevicesHasPermission action!');
     cordova.exec( successCallback,
         errorCallback,
         'FingerprintPlugin',
-        'requestPermission',
-        [{'opts': opts}]
+        'isDevicesHasPermission',
+        []
     );
-    alert('After the request Permission action!');
+    alert('After the isDevicesHasPermission action!');
 }
 
 FingerprintPlugin.install = function() {
@@ -18,6 +18,6 @@ FingerprintPlugin.install = function() {
     }
     window.plugins.FingerprintPlugin = new FingerprintPlugin();
     return window.plugins.FingerprintPlugin;
-};
+}
 
 cordova.addConstructor(FingerprintPlugin.install);
