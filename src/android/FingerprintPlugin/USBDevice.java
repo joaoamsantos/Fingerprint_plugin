@@ -145,7 +145,6 @@ public class USBDevice {
                 }
             }
         }
-        throw new Exception("Error get the feature report from the device: either connection or interface null");
         return res;
     }
 
