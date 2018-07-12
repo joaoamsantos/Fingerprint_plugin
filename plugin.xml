@@ -34,6 +34,7 @@
         <source-file src="src/android/FingerprintPlugin/FingerprintPlugin.java"  target-dir="src/FingerprintPlugin"/>
         <source-file src="src/android/FingerprintPlugin/UsbBroadcastReceiver.java" target-dir="src/FingerprintPlugin"/>
         <source-file src="src/android/FingerprintPlugin/USBDeviceAttributes.java" target-dir="src/FingerprintPlugin"/>
+        <source-file src="src/android/FingerprintPlugin/USBDevice.java" target-dir="src/FingerprintPlugin"/>
         <source-file src="lib/usbseriallibrary.jar" target-dir="libs"/>   
     </platform>
 
