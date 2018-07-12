@@ -1,4 +1,4 @@
-package com.morpho.android.usb;
+package FingerprintPlugin;
 
 public class USBConstants {
     public static final int DEFAULT_PACKET_SIZE = 8;
