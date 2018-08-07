@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        id="Fingerprint_plugin" version="0.0.1">
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+
+     id="FingerprintPlugin" 
+	 version="0.0.1">
     <name>FingerprintPlugin</name>
-
-    <description>An Android Cordova plugin that allows users to connect with a Fingerprint scanner using the USB port.</description>
+	<description>An Android Cordova plugin that allows users to connect with a Fingerprint scanner using the USB port.</description>
     <license>MIT</license>
+	<keywords>cordova,android,fingerprint</keywords>
 
-    <keywords>cordova,android,fingerprint</keywords>
-    <repo>https://github.com/joaoamsantos/Fingerprint_plugin</repo>
+
+    
+	<repo>https://github.com/joaoamsantos/Fingerprint_plugin</repo>
     <issue>https://github.com/joaoamsantos/Fingerprint_plugin/issues</issue>
   
     <engines>
@@ -19,6 +22,7 @@
         <clobbers target="window.FingerprintPlugin" />
     </js-module>
 
+
     <platform name="android">
         <config-file target="config.xml" parent="/*">
             <feature name="TestFinger">
@@ -26,17 +30,13 @@
             </feature>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.USB_PERMISSION" />
-            <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
-        </config-file>
 
         <source-file src="src/android/FingerprintPlugin/FingerprintPlugin.java"  target-dir="src/FingerprintPlugin"/>
         <source-file src="src/android/FingerprintPlugin/UsbBroadcastReceiver.java" target-dir="src/FingerprintPlugin"/>
         <source-file src="src/android/FingerprintPlugin/USBDeviceAttributes.java" target-dir="src/FingerprintPlugin"/>
         <source-file src="src/android/FingerprintPlugin/USBDevice.java" target-dir="src/FingerprintPlugin"/>
         <source-file src="src/android/FingerprintPlugin/USBConstants.java" target-dir="src/FingerprintPlugin"/>
-        <source-file src="lib/usbseriallibrary.jar" target-dir="libs"/>   
+        <source-file src="lib/usbseriallibrary.jar" target-dir="libs"/>
     </platform>
 
 </plugin>
