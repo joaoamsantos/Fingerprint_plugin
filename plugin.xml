@@ -16,7 +16,7 @@
     </engines>
   
     <js-module src="www/Fingerprint_plugin.js" name="FingerprintPlugin">
-        <clobbers target="window.plugins.FingerprintPlugin" />
+        <clobbers target="window.FingerprintPlugin" />
     </js-module>
 
     <platform name="android">
