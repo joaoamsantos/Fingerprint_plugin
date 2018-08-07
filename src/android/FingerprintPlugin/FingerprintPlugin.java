@@ -156,6 +156,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 		}
 
 		else if (ACTION_DEVICES_HAS_PERMISSION.equals(action)) {
+			JSONObject opts = arg_object.has("opts")? arg_object.getJSONObject("opts") : new JSONObject();
 			isDevicesHasPermission(opts,callbackContext);
 			return true;
 		}
