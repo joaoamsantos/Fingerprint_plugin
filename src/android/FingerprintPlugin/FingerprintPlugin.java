@@ -1,5 +1,6 @@
 package FingerprintPlugin;
 
+import Fingerprint_plugin.R;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
