@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "An Android Cordova plugin that allows users to display simple Toast messages at the bottom of the screen.",
   "cordova": {
-    "id": "Fingerprint_plugin",
+    "id": "FingerprintPlugin",
     "platforms": [
       "android"
     ]
