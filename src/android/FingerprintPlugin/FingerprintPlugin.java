@@ -172,7 +172,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 	 * @param callbackContext the cordova {@link CallbackContext}
 	 */
 	private void requestPermission(final JSONObject opts, final CallbackContext callbackContext) {
-		executeGlobalJavascript('StartRequestPermission');
+		executeGlobalJavascript("alert('StartRequestPermission')");
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
 				// get UsbManager from Android
@@ -491,7 +491,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 	}
 
 	private void isDevicesHasPermission(final JSONObject opts, final CallbackContext callbackContext) {
-		executeGlobalJavascript('StartIsDevicesHasPermission');
+		executeGlobalJavascript("alert('StartIsDevicesHasPermission')");
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
 				// get UsbManager from Android
@@ -592,7 +592,7 @@ public class FingerprintPlugin extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webView.loadUrl("javascript:alert('" +jsString + "');
+		webView.loadUrl("javascript:" + jsString);
             }
         });
     }
