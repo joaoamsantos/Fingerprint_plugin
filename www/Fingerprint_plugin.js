@@ -3,12 +3,7 @@ function FingerprintPlugin() {}
 
 FingerprintPlugin.prototype.isDevicesHasPermission = function(opts, successCallback, errorCallback) {
     alert('Entering the isDevicesHasPermission action!');
-    cordova.exec( successCallback,
-        errorCallback,
-        'FingerprintPlugin',
-        'isDevicesHasPermission',
-        []
-    );
+    cordova.exec( successCallback, errorCallback,'FingerprintPlugin','isDevicesHasPermission', [{'opts': opts}]);
     alert('After the isDevicesHasPermission action!');
 }
 
