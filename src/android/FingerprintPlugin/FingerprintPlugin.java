@@ -156,7 +156,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 		}
 
 		else if (ACTION_DEVICES_HAS_PERMISSION.equals(action)) {
-			isDevicesHasPermission(callbackContext);
+			isDevicesHasPermission(opts,callbackContext);
 			return true;
 		}
 		// the action doesn't exist
@@ -485,29 +485,85 @@ public class FingerprintPlugin extends CordovaPlugin {
 		catch (JSONException e){}
 	}
 
-	public boolean isDevicesHasPermission(CallbackContext callbackContext) {
-    	PluginResult result;
-	Context currentContext = this.cordova.getActivity().getApplicationContext();
-        boolean listOfDevices = listDevices();
-        if (listOfDevices) {
-        	result = new PluginResult(PluginResult.Status.OK);
-        	callbackContext.sendPluginResult(result);
-            return true;
-        }
-        result = new PluginResult(PluginResult.Status.ERROR);
-    	callbackContext.sendPluginResult(result);
-        return false;
-    }
+	private void isDevicesHasPermission(final JSONObject opts, final CallbackContext callbackContext) {
+		cordova.getThreadPool().execute(new Runnable() {
+			public void run() {
+				// get UsbManager from Android
+				manager = (UsbManager) cordova.getActivity().getSystemService(Context.USB_SERVICE);
+				UsbSerialProber prober;
 
-    	public boolean listDevices() {
-	Context currentContext = this.cordova.getActivity().getApplicationContext();
-	if (currentContext != null) {
-	 	UsbManager usbManager = (UsbManager) currentContext.getSystemService("usb");
-	 	for (UsbDevice usbDevice : usbManager.getDeviceList().values()) {
-	 		if(!usbDevice.getDeviceName().equals(""))
-	 		return true;
-		 }
-    	}
+				if (opts.has("vid") && opts.has("pid")) {
+					ProbeTable customTable = new ProbeTable();
+					Object o_vid = opts.opt("vid"); //can be an integer Number or a hex String
+					Object o_pid = opts.opt("pid"); //can be an integer Number or a hex String
+					int vid = o_vid instanceof Number ? ((Number) o_vid).intValue() : Integer.parseInt((String) o_vid,16);
+					int pid = o_pid instanceof Number ? ((Number) o_pid).intValue() : Integer.parseInt((String) o_pid,16);
+					String driver = opts.has("driver") ? (String) opts.opt("driver") : "CdcAcmSerialDriver";
+
+					if (driver.equals("FtdiSerialDriver")) {
+						customTable.addProduct(vid, pid, FtdiSerialDriver.class);
+					}
+					else if (driver.equals("CdcAcmSerialDriver")) {
+						customTable.addProduct(vid, pid, CdcAcmSerialDriver.class);
+					}
+					else if (driver.equals("Cp21xxSerialDriver")) {
+                    	customTable.addProduct(vid, pid, Cp21xxSerialDriver.class);
+					}
+					else if (driver.equals("ProlificSerialDriver")) {
+                    	customTable.addProduct(vid, pid, ProlificSerialDriver.class);
+					}
+					else if (driver.equals("Ch34xSerialDriver")) {
+						customTable.addProduct(vid, pid, Ch34xSerialDriver.class);
+					}
+                    else {
+                        Log.d(TAG, "Unknown driver!");
+                        callbackContext.error("Unknown driver!");
+                    }
+
+					prober = new UsbSerialProber(customTable);
+
+				}
+				else {
+					// find all available drivers from attached devices.
+					prober = UsbSerialProber.getDefaultProber();
+				}
+
+				List<UsbSerialDriver> availableDrivers = prober.findAllDrivers(manager);
+
+				if (!availableDrivers.isEmpty()) {
+					// get the first one as there is a high chance that there is no more than one usb device attached to your android
+					driver = availableDrivers.get(0);
+					UsbDevice device = driver.getDevice();
+					// create the intent that will be used to get the permission
+					PendingIntent pendingIntent = PendingIntent.getBroadcast(cordova.getActivity(), 0, new Intent(UsbBroadcastReceiver.USB_PERMISSION), 0);
+					// and a filter on the permission we ask
+					IntentFilter filter = new IntentFilter();
+					filter.addAction(UsbBroadcastReceiver.USB_PERMISSION);
+					// this broadcast receiver will handle the permission results
+					UsbBroadcastReceiver usbReceiver = new UsbBroadcastReceiver(callbackContext, cordova.getActivity());
+					cordova.getActivity().registerReceiver(usbReceiver, filter);
+					// finally ask for the permission
+					manager.requestPermission(device, pendingIntent);
+				}
+				else {
+					// no available drivers
+					Log.d(TAG, "No device found!");
+					callbackContext.error("No device found!");
+				}
+			}
+		});
+	}
+
+
+	public boolean listDevices() {
+		Context currentContext = this.cordova.getActivity().getApplicationContext();
+		if (currentContext != null) {
+	 		UsbManager usbManager = (UsbManager) currentContext.getSystemService("usb");
+	 		for (UsbDevice usbDevice : usbManager.getDeviceList().values()) {
+	 			if(!usbDevice.getDeviceName().equals(""))
+	 			return true;
+			}
+		}
 	return false;
     }
 }
