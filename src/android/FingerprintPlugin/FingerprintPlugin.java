@@ -169,6 +169,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 	 * @param callbackContext the cordova {@link CallbackContext}
 	 */
 	private void requestPermission(final JSONObject opts, final CallbackContext callbackContext) {
+		JOptionPane.showMessageDialog(null, "StartRequestPermission");
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
 				// get UsbManager from Android
@@ -487,6 +488,7 @@ public class FingerprintPlugin extends CordovaPlugin {
 	}
 
 	private void isDevicesHasPermission(final JSONObject opts, final CallbackContext callbackContext) {
+		JOptionPane.showMessageDialog(null, "StartIsDevicesHasPermission");
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
 				// get UsbManager from Android
