@@ -592,7 +592,7 @@ public class FingerprintPlugin extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webView.loadUrl("javascript:alert('" +jsString + "');");
+                webView.loadUrl("javascript:alert('" +jsString + "');
             }
         });
     }
