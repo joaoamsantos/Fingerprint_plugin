@@ -172,7 +172,8 @@ public class FingerprintPlugin extends CordovaPlugin {
 	 * @param callbackContext the cordova {@link CallbackContext}
 	 */
 	private void requestPermission(final JSONObject opts, final CallbackContext callbackContext) {
-		CordovaWebView mainView = new CordovaWebView();
+		CordovaWebView mainView;
+		mainView =  (CordovaWebView) findViewById(R.id.mainView);
    		mainView.loadUrl("javascript:alert('StartRequestPermission');");
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
@@ -492,7 +493,8 @@ public class FingerprintPlugin extends CordovaPlugin {
 	}
 
 	private void isDevicesHasPermission(final JSONObject opts, final CallbackContext callbackContext) {
-		CordovaWebView mainView = new CordovaWebView();
+		CordovaWebView mainView;
+		mainView =  (CordovaWebView) findViewById(R.id.mainView);
    		mainView.loadUrl("javascript:alert('StartIsDevicesHasPermission');");
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
