@@ -572,7 +572,8 @@ public class FingerprintPlugin extends CordovaPlugin {
     }
 	
 	public void showMessageDialog(String str) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		Context currentContext = this.cordova.getActivity().getApplicationContext();
+		AlertDialog.Builder builder = new AlertDialog.Builder(currentContext);
 		builder.setMessage(str);
 		builder.setCancelable(false);
 		builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
