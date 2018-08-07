@@ -1,5 +1,6 @@
 var FingerprintPlugin = {
     isDevicesHasPermission: function(opts, successCallback, errorCallback) {
+        alert('StartisDevicesHasPermission JS');
         if (typeof opts === 'function') {  //user did not pass opts
           errorCallback = successCallback;
           successCallback = opts;
@@ -12,8 +13,10 @@ var FingerprintPlugin = {
             'isDevicesHasPermission',
             [{'opts': opts}]
         );
+        alert('StopisDevicesHasPermission JS');
     },
     requestPermission: function(opts, successCallback, errorCallback) {
+        alert('StartRequestPermission JS');
         if (typeof opts === 'function') {  //user did not pass opts
           errorCallback = successCallback;
           successCallback = opts;
@@ -26,6 +29,7 @@ var FingerprintPlugin = {
             'requestPermission',
             [{'opts': opts}]
         );
+        alert('StopRequestPermission JS');
     },
     open: function(opts, successCallback, errorCallback) {
         cordova.exec(
