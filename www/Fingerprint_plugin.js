@@ -1,18 +1,53 @@
-// Empty constructor
-function FingerprintPlugin() {}
-
-FingerprintPlugin.prototype.isDevicesHasPermission = function(opts, successCallback, errorCallback) {
-    alert('Entering the isDevicesHasPermission action!');
-    cordova.exec( successCallback, errorCallback,'FingerprintPlugin','isDevicesHasPermission', [{'opts': opts}]);
-    alert('After the isDevicesHasPermission action!');
-}
-
-FingerprintPlugin.install = function() {
-	if (!window.plugins) {
-		window.plugins = {};
+var Fingerprint = {
+    isDevicesHasPermission: function(opts, successCallback, errorCallback) {
+        if (typeof opts === 'function') {  //user did not pass opts
+          errorCallback = successCallback;
+          successCallback = opts;
+          opts = {};
+        }
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            'FingerprintPlugin',
+            'isDevicesHasPermission',
+            [{'opts': opts}]
+        );
+    },
+    open: function(opts, successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            'FingerprintPlugin',
+            'openSerial',
+            [{'opts': opts}]
+        );
+    },
+    read: function(successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            'FingerprintPlugin',
+            'readSerial',
+            []
+        );
+    },
+    close: function(successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            'FingerprintPlugin',
+            'closeSerial',
+            []
+        );
+    },
+    registerReadCallback: function(successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            'FingerprintPlugin',
+            'registerReadCallback',
+            []
+        );
     }
-    window.plugins.FingerprintPlugin = new FingerprintPlugin();
-    return window.plugins.FingerprintPlugin;
-}
-
-cordova.addConstructor(FingerprintPlugin.install);
+};
+module.exports = Fingerprint;
