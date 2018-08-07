@@ -1,4 +1,4 @@
-var Fingerprint = {
+var FingerprintPlugin = {
     isDevicesHasPermission: function(opts, successCallback, errorCallback) {
         if (typeof opts === 'function') {  //user did not pass opts
           errorCallback = successCallback;
@@ -50,4 +50,4 @@ var Fingerprint = {
         );
     }
 };
-module.exports = Fingerprint;
+module.exports = FingerprintPlugin;
